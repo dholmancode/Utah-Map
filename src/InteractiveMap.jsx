@@ -229,8 +229,8 @@ const InteractiveMap = () => {
       <svg ref={svgRef} className="interactive-map">
         <defs>
           <linearGradient id="utahGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="48%" stopColor="#333333" />
-            <stop offset="57%" stopColor="#333333" />
+            <stop offset="48%" stopColor="#33333300" />
+            <stop offset="57%" stopColor="#33333300" />
           </linearGradient>
         </defs>
         {/* Your map content */}
