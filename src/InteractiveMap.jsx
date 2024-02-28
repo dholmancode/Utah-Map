@@ -82,7 +82,7 @@ const InteractiveMap = () => {
     "Zion National Park": ZionIcon,
   };
 
-  // eslint-disable-next-line
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   if (parksData.length === 0) return;
 
