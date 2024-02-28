@@ -82,31 +82,31 @@ const InteractiveMap = () => {
   };
 
   useEffect(() => {
-    if (parksData.length === 0) return;
-
     const centerMapButton = d3
-      .select(svgRef.current)
-      .append("foreignObject")
-      .attr("width", 120)
-      .attr("height", 150)
-      .append("xhtml:div")
-      .attr("class", "center-map-button-container")
-      .append("button");
+    .select(svgRef.current)
+    .append("foreignObject")
+    .attr("width", 120)
+    .attr("height", 150)
+    .append("xhtml:div")
+    .attr("class", "center-map-button-container")
+    .append("button");
 
-    centerMapButton
-      .append("img")
-      .attr("src", CenterIcon)
-      .attr("alt", "Center Map")
-      .attr("width", 130)
-      .attr("height", 130)
-      .on("click", () => {
-        // Re-center the map
-        const zoomTransform = d3.zoomIdentity.translate(0, 0).scale(1);
-        d3.select(svgRef.current)
-          .transition()
-          .duration(1050)
-          .call(zoomBehavior.transform, zoomTransform);
-      });
+  centerMapButton
+    .append("img")
+    .attr("src", CenterIcon)
+    .attr("alt", "Center Map")
+    .attr("width", 130)
+    .attr("height", 130)
+    .on("click", () => {
+      // Re-center the map
+      const zoomTransform = d3.zoomIdentity.translate(0, 0).scale(1);
+      d3.select(svgRef.current)
+        .transition()
+        .duration(1050)
+        .call(zoomBehavior.transform, zoomTransform);
+    });
+
+    if (parksData.length === 0) return;
 
     const path = d3.geoPath().projection(projectionRef.current);
 
@@ -229,8 +229,8 @@ const InteractiveMap = () => {
       <svg ref={svgRef} className="interactive-map">
         <defs>
           <linearGradient id="utahGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="48%" stopColor="#33333300" />
-            <stop offset="57%" stopColor="#33333300" />
+            <stop offset="48%" stopColor="#4E4E4E" />
+            <stop offset="57%" stopColor="#4E4E4E" />
           </linearGradient>
         </defs>
         {/* Your map content */}
