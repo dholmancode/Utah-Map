@@ -82,127 +82,128 @@ const InteractiveMap = () => {
     "Zion National Park": ZionIcon,
   };
 
-  useEffect(() => {
-    if (parksData.length === 0) return;
+  // eslint-disable-next-line
+useEffect(() => {
+  if (parksData.length === 0) return;
 
-    const centerMapButton = d3
-      .select(svgRef.current)
-      .append("foreignObject")
-      .attr("width", 120)
-      .attr("height", 150)
-      .append("xhtml:div")
-      .attr("class", "center-map-button-container")
-      .append("button");
+  const centerMapButton = d3
+    .select(svgRef.current)
+    .append("foreignObject")
+    .attr("width", 120)
+    .attr("height", 150)
+    .append("xhtml:div")
+    .attr("class", "center-map-button-container")
+    .append("button");
 
-    centerMapButton
-      .append("img")
-      .attr("src", CenterIcon)
-      .attr("alt", "Center Map")
-      .attr("width", 130)
-      .attr("height", 130)
-      .on("click", () => {
-        // Re-center the map
-        const zoomTransform = d3.zoomIdentity.translate(0, 0).scale(1);
-        d3.select(svgRef.current)
-          .transition()
-          .duration(1050)
-          .call(zoomBehavior.transform, zoomTransform);
-      });
-
-    const path = d3.geoPath().projection(projectionRef.current);
-
-    if (!mapGroupRef.current) {
-      mapGroupRef.current = d3.select(svgRef.current).append("g");
-    }
-
-    mapGroupRef.current
-      .selectAll(".utah")
-      .data([GeoJSONData])
-      .join("path")
-      .attr("class", "utah")
-      .attr("d", path)
-      .style("stroke", "white")
-      .style("stroke-width", 5)
-      .attr("fill", "url(#utahGradient)") // Apply the gradient fill
-      .attr("rx", 10) // Set horizontal radius for rounded corners
-      .attr("ry", 10); // Set vertical radius for rounded corners
-
-    mapGroupRef.current
-      .selectAll(".park-paths")
-      .data(GeoJSONData.features)
-      .join("path")
-      .attr("class", "park-paths")
-      .attr("d", path)
-      .attr("fill", "transparent")
-      .attr("stroke", "black")
-      .attr("stroke-width", 0);
-
-    parksData.forEach((park) => {
-      const [x, y] = projectionRef.current([park.longitude, park.latitude]);
-
-      const parkGroup = mapGroupRef.current.append("g");
-
-      parkGroup
-        .append("image")
-        .attr("class", "park-icon")
-        .attr("x", x - 10)
-        .attr("y", y - 15)
-        .attr("xlink:href", parkIcons[park.fullName])
-        .on("click", (event) => {
-          // Remove the 'selected' class from all park icons
-          d3.selectAll(".park-icon").classed("selected", false);
-          // Add the 'selected' class to the clicked park icon
-          d3.select(event.currentTarget).classed("selected", true);
-          // Set the selected park
-          setSelectedPark(park);
-        });
-        
-
-      // Update the selectedPark state in response to user interaction
-
-      const titleBackground = parkGroup
-        .append("rect")
-        .style("opacity", "0%") // Initially hide the background
-        .attr("class", "park-title-background")
-        .attr("x", x + 35) // Adjust x position to place the background behind the text
-        .attr("y", y - 40) // Adjust y position to place the background behind the text
-        .attr("width", "300px") // Set width based on text length
-        .attr("height", 35) // Set height
-        .attr("rx", 10) // Set horizontal radius for rounded corners
-        .attr("ry", 10) // Set vertical radius for rounded corners
-        .style("visibility", "hidden") // Initially hide the background
-        .style("opacity", "0%"); // Initially hide the background
-
-      const titleText = parkGroup
-        .append("text")
-        .attr("class", "park-title")
-        .attr("x", x + 40)
-        .attr("y", y - 18)
-        .text(park.fullName)
-        .style("font-size", "15px")
-        .style("fill", "black")
-        .style("opacity", "0") // Initially hide the text
-        .style("visibility", "hidden"); // Initially hide the text
-
-      parkGroup
-        .on("mouseover", function () {
-          titleBackground.style("visibility", "visible"); // Show the background rectangle
-          titleText.style("opacity", "0").style("visibility", "visible"); // Show the text
-        })
-        .on("mouseout", function () {
-          titleBackground.style("visibility", "hidden"); // Hide the background rectangle
-          titleText.style("opacity", "0").style("visibility", "hidden"); // Hide the text
-        });
+  centerMapButton
+    .append("img")
+    .attr("src", CenterIcon)
+    .attr("alt", "Center Map")
+    .attr("width", 130)
+    .attr("height", 130)
+    .on("click", () => {
+      // Re-center the map
+      const zoomTransform = d3.zoomIdentity.translate(0, 0).scale(1);
+      d3.select(svgRef.current)
+        .transition()
+        .duration(1050)
+        .call(zoomBehavior.transform, zoomTransform);
     });
 
-    const zoomBehavior = zoom()
-      .scaleExtent([1, 8])
-      .on("zoom", (event) => {
-        mapGroupRef.current.attr("transform", event.transform);
+  const path = d3.geoPath().projection(projectionRef.current);
+
+  if (!mapGroupRef.current) {
+    mapGroupRef.current = d3.select(svgRef.current).append("g");
+  }
+
+  mapGroupRef.current
+    .selectAll(".utah")
+    .data([GeoJSONData])
+    .join("path")
+    .attr("class", "utah")
+    .attr("d", path)
+    .style("stroke", "white")
+    .style("stroke-width", 5)
+    .attr("fill", "url(#utahGradient)") // Apply the gradient fill
+    .attr("rx", 10) // Set horizontal radius for rounded corners
+    .attr("ry", 10); // Set vertical radius for rounded corners
+
+  mapGroupRef.current
+    .selectAll(".park-paths")
+    .data(GeoJSONData.features)
+    .join("path")
+    .attr("class", "park-paths")
+    .attr("d", path)
+    .attr("fill", "transparent")
+    .attr("stroke", "black")
+    .attr("stroke-width", 0);
+
+  parksData.forEach((park) => {
+    const [x, y] = projectionRef.current([park.longitude, park.latitude]);
+
+    const parkGroup = mapGroupRef.current.append("g");
+
+    parkGroup
+      .append("image")
+      .attr("class", "park-icon")
+      .attr("x", x - 10)
+      .attr("y", y - 15)
+      .attr("xlink:href", parkIcons[park.fullName])
+      .on("click", (event) => {
+        // Remove the 'selected' class from all park icons
+        d3.selectAll(".park-icon").classed("selected", false);
+        // Add the 'selected' class to the clicked park icon
+        d3.select(event.currentTarget).classed("selected", true);
+        // Set the selected park
+        setSelectedPark(park);
       });
 
-    d3.select(svgRef.current).call(zoomBehavior);
-  }, [parksData]);
+    // Update the selectedPark state in response to user interaction
+
+    const titleBackground = parkGroup
+      .append("rect")
+      .style("opacity", "0%") // Initially hide the background
+      .attr("class", "park-title-background")
+      .attr("x", x + 35) // Adjust x position to place the background behind the text
+      .attr("y", y - 40) // Adjust y position to place the background behind the text
+      .attr("width", "300px") // Set width based on text length
+      .attr("height", 35) // Set height
+      .attr("rx", 10) // Set horizontal radius for rounded corners
+      .attr("ry", 10) // Set vertical radius for rounded corners
+      .style("visibility", "hidden") // Initially hide the background
+      .style("opacity", "0%"); // Initially hide the background
+
+    const titleText = parkGroup
+      .append("text")
+      .attr("class", "park-title")
+      .attr("x", x + 40)
+      .attr("y", y - 18)
+      .text(park.fullName)
+      .style("font-size", "15px")
+      .style("fill", "black")
+      .style("opacity", "0") // Initially hide the text
+      .style("visibility", "hidden"); // Initially hide the text
+
+    parkGroup
+      .on("mouseover", function () {
+        titleBackground.style("visibility", "visible"); // Show the background rectangle
+        titleText.style("opacity", "0").style("visibility", "visible"); // Show the text
+      })
+      .on("mouseout", function () {
+        titleBackground.style("visibility", "hidden"); // Hide the background rectangle
+        titleText.style("opacity", "0").style("visibility", "hidden"); // Hide the text
+      });
+  });
+
+  const zoomBehavior = zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", (event) => {
+      mapGroupRef.current.attr("transform", event.transform);
+    });
+
+  d3.select(svgRef.current).call(zoomBehavior);
+}, [parksData]);
+
 
   useEffect(() => {
     if (!selectedPark) return;
