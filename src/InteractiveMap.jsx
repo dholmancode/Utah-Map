@@ -85,7 +85,7 @@ const InteractiveMap = () => {
     const centerMapButton = d3
     .select(svgRef.current)
     .append("foreignObject")
-    .attr("width", 120)
+    .attr("width", 220)
     .attr("height", 150)
     .append("xhtml:div")
     .attr("class", "center-map-button-container")

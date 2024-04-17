@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const initialMessagePark = {
-  fullName: "Select a park on the map.",
+  fullName: "Beep boop bop.",
   description: "",
   location: "",
   visitors: "",
